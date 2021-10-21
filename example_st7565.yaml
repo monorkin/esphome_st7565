@@ -1,0 +1,13 @@
+# Example configuration entry
+spi:
+  clk_pin: D5
+  mosi_pin: D7
+
+display:
+  - platform: st7565
+    reset_pin: D0
+    cs_pin: D8
+    dc_pin: D1
+    contrast: 0x7f
+    lambda: |-
+      it.print(0, 0, id(font), "Hello World!");
