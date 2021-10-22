@@ -16,8 +16,9 @@ external_components:
     components: [ st7565 ]
 ```
 
-Then you will have to setup an SPI bus as the display uses 4-wire SPI.
-You will have to add something like the following to your configuration YAML:
+Then you will have to setup an SPI bus as the display communicates over 4-wire SPI.
+You will have to add something like the following to your configuration YAML,
+the exact pins and id might be different for your setup:
 
 ```yaml
 spi:
@@ -27,6 +28,7 @@ spi:
 ```
 
 Finally, you add the display like any other ESPHome display module.
+
 Notice that you *have to* configure a CS (chip select) pin as with any other
 SPI device, but you also *have to* define a DC (data/command) pin - sometimes
 labeled RS (register select). You can optionally pass a contrast value (0 to 63),
