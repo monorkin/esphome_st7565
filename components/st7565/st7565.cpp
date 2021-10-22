@@ -124,25 +124,31 @@ void ST7565::display_init_() {
 
   this->command_(this->ST7565_SOFT_RESET);
   this->command_(this->ST7565_DISPLAY_OFF);
-  this->command_(this->ST7565_SET_SCAN_DIR_NORMAL);
+  this->command_(this->ST7565_SET_SCAN_DIR_REVERSE);
   this->command_(this->ST7565_SET_DISPLAY_NORMAL);
-  this->command_(this->ST7565_SET_LCD_BIAS_1_9);
+  this->command_(this->ST7565_SET_LCD_BIAS_1_7);
 
   // Disable the cursor (we will only ever use graphics mode)
   this->command_(this->ST7565_DISABLE_CURSOR);
   this->command_(0x00);
 
-  // Enable boost circuit, voltage regulator & voltage follower
-  this->command_(this->ST7565_SET_POWER_CONTROL | 0x0F);
+  // Enable boost circuit, voltage regulator & voltage follower one by one
+  this->command_(this->ST7565_SET_POWER_CONTROL | 0x04);
+  delay(50);
+  this->command_(this->ST7565_SET_POWER_CONTROL | 0x06);
+  delay(50);
+  this->command_(this->ST7565_SET_POWER_CONTROL | 0x07);
+  delay(10);
+
   // Set the 5V regulator resistor ratio to the maximum value
-  this->command_(this->ST7565_SET_5V_REGULATOR_RESISTOR_RATIO | 0x07);
+  this->command_(this->ST7565_SET_5V_REGULATOR_RESISTOR_RATIO | 0x06);
 
   // Set the brightness/contrast of the display
   this->command_(this->ST7565_SET_BRIGHTNESS);
   this->command_(this->contrast_);
 
-  this->command_(this->ST7565_DISPLAY_OFF);
-  this->command_(this->ST7565_SET_ALL_PIXELS_ON);
+  this->command_(this->ST7565_DISPLAY_ON);
+  // this->command_(this->ST7565_SET_ALL_PIXELS_ON);
 }
 
 }  // namespace st7565

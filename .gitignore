@@ -1,3 +1,6 @@
 # Editor fileds
 tags
 *.swap
+
+# Build artefacts
+**/*/__pycache__

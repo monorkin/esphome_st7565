@@ -9,8 +9,6 @@ namespace st7565 {
 
 class ST7565;
 
-using st7565_writer_t = std::function<void(ST7565 &)>;
-
 class ST7565 : public PollingComponent,
                public display::DisplayBuffer,
                public spi::SPIDevice<spi::BIT_ORDER_MSB_FIRST, spi::CLOCK_POLARITY_HIGH, spi::CLOCK_PHASE_TRAILING,
@@ -38,38 +36,36 @@ class ST7565 : public PollingComponent,
   static const uint8_t ST7565_SET_SCAN_DIR_REVERSE = 0xC8;
   static const uint8_t ST7565_SOFT_RESET = 0xE2;
 
-  uint8_t contrast_;
-
-  void set_writer(st7565_writer_t &&writer) { this->writer_local_ = writer; }
-  void set_height(uint16_t height) { this->height_ = height; }
-  void set_width(uint16_t width) { this->width_ = width; }
-
+  void HOT display();
   void setup() override;
   void dump_config() override;
-  float get_setup_priority() const override;
+  float get_setup_priority() const override { return setup_priority::PROCESSOR; }
+
   void update() override;
   void fill(Color color) override;
-  void write_display_data();
+
+  void set_height(uint16_t height) { this->height_ = height; }
+  void set_width(uint16_t width) { this->width_ = width; }
   void set_contrast(uint8_t contrast) { this->contrast_ = contrast; }
   void set_dc_pin(GPIOPin *dc_pin) { this->dc_pin_ = dc_pin; }
-  void set_reset_pin(GPIOPin *reset) { this->reset_pin_ = reset; }:w
-  float get_setup_priority() const override { return setup_priority::PROCESSOR; }
+  void set_reset_pin(GPIOPin *reset) { this->reset_pin_ = reset; }
 
  protected:
   void draw_absolute_pixel_internal(int x, int y, Color color) override;
   int get_height_internal() override;
   int get_width_internal() override;
   size_t get_buffer_length_();
+  void init_reset_();
   void display_init_();
   void command_(uint8_t value);
+  void start_data_();
+  void end_data_();
   void data_(uint8_t value);
-  void send_(uint8_t type, uint8_t value);
-  void goto_xy_(uint16_t x, uint16_t y);
-  void start_transaction_();
-  void end_transaction_();
 
+  uint8_t contrast_ = 32>>2;
   int16_t width_ = 128, height_ = 64;
-  optional<st7565_writer_t> writer_local_{};
+  GPIOPin *reset_pin_;
+  GPIOPin *dc_pin_;
 };
 
 }  // namespace st7565

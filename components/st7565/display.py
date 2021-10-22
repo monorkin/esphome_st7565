@@ -1,3 +1,4 @@
+from esphome import pins
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome.components import display, spi
@@ -28,7 +29,7 @@ CONFIG_SCHEMA = (
             cv.Required(CONF_HEIGHT): cv.int_,
             cv.Required(CONF_DC_PIN): pins.gpio_output_pin_schema,
             cv.Optional(CONF_RESET_PIN): pins.gpio_output_pin_schema,
-            cv.Optional(CONF_CONTRAST, default=0x18): cv.int_,
+            cv.Optional(CONF_CONTRAST, default=0x10): cv.int_
         }
     )
     .extend(cv.polling_component_schema("1s"))
@@ -43,14 +44,17 @@ async def to_code(config):
 
     if CONF_LAMBDA in config:
         lambda_ = await cg.process_lambda(
-            config[CONF_LAMBDA], [(ST7565Ref, "it")], return_type=cg.void
+            config[CONF_LAMBDA], [(display.DisplayBufferRef, "it")], return_type=cg.void
         )
         cg.add(var.set_writer(lambda_))
+
     cg.add(var.set_width(config[CONF_WIDTH]))
     cg.add(var.set_height(config[CONF_HEIGHT]))
     cg.add(var.set_contrast(config[CONF_CONTRAST]))
+
     dc = await cg.gpio_pin_expression(config[CONF_DC_PIN])
     cg.add(var.set_dc_pin(dc))
+
     reset = await cg.gpio_pin_expression(config[CONF_RESET_PIN])
     cg.add(var.set_reset_pin(reset))
 
