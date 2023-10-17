@@ -36,6 +36,8 @@ class ST7565 : public PollingComponent,
   static const uint8_t ST7565_SET_SCAN_DIR_REVERSE = 0xC8;
   static const uint8_t ST7565_SOFT_RESET = 0xE2;
 
+  display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_GRAYSCALE; }
+
   void HOT display();
   void setup() override;
   void dump_config() override;

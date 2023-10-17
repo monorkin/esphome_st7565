@@ -8,8 +8,6 @@ namespace st7565 {
 
 static const char *const TAG = "st7565";
 
-display::DisplayType get_display_type() override { return display::DisplayType::DISPLAY_TYPE_GRAYSCALE; }
-
 void ST7565::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ST7565...");
   this->dump_config();
