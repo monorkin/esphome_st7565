@@ -8,6 +8,8 @@ namespace st7565 {
 
 static const char *const TAG = "st7565";
 
+virtual DisplayType get_display_type() const override { return DisplayType::DISPLAY_TYPE_MONO; }
+
 void ST7565::setup() {
   ESP_LOGCONFIG(TAG, "Setting up ST7565...");
   this->dump_config();
