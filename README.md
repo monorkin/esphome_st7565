@@ -12,7 +12,7 @@ component by adding the following to your configuration YAML:
 
 ```yaml
 external_components:
-  - source: github://monorkin/esphome_st7565@main
+  - source: github://monorkin/esphome_st7565@1.0.0
     components: [ st7565 ]
 ```
 
