@@ -11,6 +11,7 @@ from esphome.const import (
     CONF_DC_PIN,
     CONF_RESET_PIN
 )
+from esphome.const import __version__ as ESPHOME_VERSION
 
 AUTO_LOAD = ["display"]
 DEPENDENCIES = ["spi"]
