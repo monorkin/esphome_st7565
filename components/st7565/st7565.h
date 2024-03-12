@@ -1,6 +1,7 @@
 #pragma once
 
 #include "esphome/core/component.h"
+#include "esphome/core/version.h"
 #include "esphome/components/display/display_buffer.h"
 #include "esphome/components/spi/spi.h"
 
@@ -9,10 +10,16 @@ namespace st7565 {
 
 class ST7565;
 
+#if ESPHOME_VERSION_CODE >= VERSION_CODE(2023, 12, 0)
+class ST7565 : public display::DisplayBuffer,
+               public spi::SPIDevice<spi::BIT_ORDER_MSB_FIRST, spi::CLOCK_POLARITY_HIGH, spi::CLOCK_PHASE_TRAILING,
+                                     spi::DATA_RATE_8MHZ> {
+#else
 class ST7565 : public PollingComponent,
                public display::DisplayBuffer,
                public spi::SPIDevice<spi::BIT_ORDER_MSB_FIRST, spi::CLOCK_POLARITY_HIGH, spi::CLOCK_PHASE_TRAILING,
                                      spi::DATA_RATE_8MHZ> {
+#endif
  public:
   static const uint8_t ST7565_SET_COLUMN_ADDRESS_UPPER_NIBBLE = 0x00;
   static const uint8_t ST7565_SET_COLUMN_ADDRESS_LOWER_NIBBLE = 0x10;
